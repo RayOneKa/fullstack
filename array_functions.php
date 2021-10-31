@@ -127,3 +127,18 @@ $personUnder30 = array_filter($persons, function ($person) {
 
 echo '<br>';
 print_r($personUnder30);
+
+
+$new_arr = [1, 2, 3, 4, 5];
+unset($new_arr[2]);
+
+echo '<br>';
+print_r($new_arr);
+
+$deleted = array_shift($new_arr);
+echo "array_shift deleted $deleted<br>";
+
+print_r($new_arr);
+$deleted = array_pop($new_arr);
+echo "array_pop deleted $deleted<br>";
+print_r($new_arr);
