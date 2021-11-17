@@ -1,9 +1,9 @@
 <?php
-
+session_start();
 require_once 'task.php';
 
 $text = $_POST['task'];
-$task = new Task($text);
-$task->add();
+Task::add($text);
+$_SESSION['add'] = true;
 
 header('Location: form.php');

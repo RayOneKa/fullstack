@@ -3,39 +3,51 @@
 class Task
 {
     public $id;
-    public $text;
-    public $finished;
 
-    public function __construct ($text)
+    public function __construct ($id)
     {
-        $this->text = $text;
+        $this->id = $id;
     }
 
-    public function add ()
+    public static function add ($text)
     {
         $mysql = new mysqli('localhost', 'root', 'root', 'fullstack');
-        $query = "INSERT INTO tasks (text) values ('$this->text')";
+        $query = "INSERT INTO tasks (text) values ('$text')";
         $mysql->query($query);
         $mysql->close();
     }
 
     public function del ()
     {
-        // Реализовать метод del
+        $user = $pass = 'root';
+        $mysql = new PDO('mysql:host=localhost;dbname=fullstack;port=3307', $user, $pass);
+        $query = 'DELETE FROM tasks WHERE id = :id';
+        $res = $mysql->prepare($query);
+        $res->execute([
+            ':id' => $this->id
+        ]);
     }
 
-    public function finish ()
+    public function toggle ($toggle)
     {
-        // Реализовать метод finish
+        $user = $pass = 'root';
+        $mysql = new PDO('mysql:host=localhost;dbname=fullstack;port=3307', $user, $pass);
+        $query = 'UPDATE tasks SET finished = :toggle WHERE id = :id';
+        $res = $mysql->prepare($query);
+        $res->execute([
+            ':id' => $this->id,
+            ':toggle' => $toggle
+        ]);
     }
 
     public static function getTasks ()
     {
-        $mysql = new \mysqli('localhost', 'root', 'root', 'fullstack');
-        $query = 'SELECT * FROM tasks';
+        $user = $pass = 'root';
+        $mysql = new PDO('mysql:host=localhost;dbname=fullstack;port=3307', $user, $pass);
+        $query = 'SELECT * FROM tasks ORDER BY id ASC';
         $res = $mysql->query($query);
         $data = [];
-        while ($row = $res->fetch_assoc()) {
+        foreach ($res as $row) {
             $data[] = $row;
         }
         return $data;

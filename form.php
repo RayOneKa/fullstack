@@ -1,5 +1,5 @@
 <?php 
-
+session_start();
 require_once 'task.php';
 
 $res = Task::getTasks();
@@ -17,35 +17,96 @@ $res = Task::getTasks();
     </head>
     <body class='container mt-5'>
 
+        <?php
+            if (isset($_SESSION['del'])) {
+                echo
+                '
+                <div id="alert" class="alert alert-success text-center" role="alert">
+                    Задача успешно удалена!
+                </div>
+                ';
+                unset($_SESSION['del']);
+            }
+            if (isset($_SESSION['add'])) {
+                echo
+                '
+                <div id="alert" class="alert alert-success text-center" role="alert">
+                    Задача успешно добавлена!
+                </div>
+                ';
+                unset($_SESSION['add']);
+            }
+            if (isset($_SESSION['toggle'])) {
+                echo
+                '
+                <div id="alert" class="alert alert-success text-center" role="alert">
+                    Задача успешно обновлена!
+                </div>
+                ';
+                unset($_SESSION['toggle']);
+            }
+        ?>
+
         <form method="POST" action="add_task.php">
-            <input class='form-control mb-2' name='task' placeholder="Введите задачу">
+            <input required class='form-control mb-2' name='task' placeholder="Введите задачу">
             <button class='btn btn-success w-100 mb-5' type="submit">Добавить</button>
         </form>
 
-        <table class="table table-info">
-            <thead>
+        <table class="table">
+            <thead class="thead-dark">
                 <tr>
                     <th>#</th>
                     <th>Текст задачи</th>
-                    <th>Завершить</th>
+                    <th>Действие</th>
                     <th>Удалить</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Вместо заглушки через цикл (foreach) вывести список задач -->
-                <tr>
-                    <td>1</td>
-                    <td>sdfsdfsdf</td>
-                    <td>
-                        <button class='btn btn-success'>+</button>
-                    </td>
-                    <td>
-                        <button class='btn btn-danger'>x</button>
-                    </td>
-                </tr>
+                <?php
+                    foreach ($res as $key => $item) {
+                        $n = ++$key;
+                        $action = $item['finished'] ? '-' : '+';
+                        $class = $item['finished'] ? 'bg-success' : '';
+                        $strike = $item['finished'] ? 'line-through' : 'none';
+                        echo
+                        "
+                        <tr class='$class' style='--bs-bg-opacity: 0.15;'>
+                            <td>$n</td>
+                            <td style='text-decoration: $strike'>
+                                {$item['text']}
+                            </td>
+                            <td>
+                                <form method='POST' action='toggle_task.php'>
+                                    <input hidden name='id' value='{$item['id']}'>
+                                    <input hidden name='toggle' value='{$item['finished']}'>
+                                    <button style='min-width: 37px;' class='btn btn-success'>$action</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form method='POST' action='del_task.php'>
+                                    <input type='hidden' name='id' value='{$item['id']}'>
+                                    <button class='btn btn-danger'>x</button>
+                                </form>
+                            </td>
+                        </tr>
+                        ";
+                    }
+                ?>
             </tbody>
         </table>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+        <script>
+
+            setTimeout(() => {
+                //const item = document.querySelector('#alert')
+                const elem = document.getElementById("alert");
+                if (elem) {
+                    elem.parentNode.removeChild(elem);
+                }
+            }, 3000)
+
+        </script>
     </body>
 </html>
