@@ -3,10 +3,13 @@
 class Task
 {
     public $id;
+    public $text;
+    public $finished;
 
     public function __construct ($id)
     {
         $this->id = $id;
+        $this->getTask();
     }
 
     public static function add ($text)
@@ -25,6 +28,18 @@ class Task
         $res = $mysql->prepare($query);
         $res->execute([
             ':id' => $this->id
+        ]);
+    }
+
+    public function update ($text) {
+        $this->text = $text;
+        $user = $pass = 'root';
+        $mysql = new PDO('mysql:host=localhost;dbname=fullstack;port=3307', $user, $pass);
+        $query = 'UPDATE tasks SET text = :text WHERE id = :id';
+        $res = $mysql->prepare($query);
+        $res->execute([
+            ':id' => $this->id,
+            ':text' => $this->text
         ]);
     }
 
@@ -51,5 +66,22 @@ class Task
             $data[] = $row;
         }
         return $data;
+    }
+
+    protected function getTask ()
+    {
+        $user = $pass = 'root';
+        $mysql = new PDO('mysql:host=localhost;dbname=fullstack;port=3307', $user, $pass);
+        $query = 'SELECT * FROM tasks WHERE id = :id';
+        $res = $mysql->prepare($query);
+        $res->execute([
+            ':id' => $this->id
+        ]);
+
+        $task = $res->fetch();
+        if ($task) {
+            $this->text = $task['text'];
+            $this->finished = $task['finished'];
+        }
     }
 }

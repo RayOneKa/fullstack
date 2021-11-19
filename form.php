@@ -18,32 +18,22 @@ $res = Task::getTasks();
     <body class='container mt-5'>
 
         <?php
-            if (isset($_SESSION['del'])) {
-                echo
-                '
-                <div id="alert" class="alert alert-success text-center" role="alert">
-                    Задача успешно удалена!
-                </div>
-                ';
-                unset($_SESSION['del']);
-            }
-            if (isset($_SESSION['add'])) {
-                echo
-                '
-                <div id="alert" class="alert alert-success text-center" role="alert">
-                    Задача успешно добавлена!
-                </div>
-                ';
-                unset($_SESSION['add']);
-            }
-            if (isset($_SESSION['toggle'])) {
-                echo
-                '
-                <div id="alert" class="alert alert-success text-center" role="alert">
-                    Задача успешно обновлена!
-                </div>
-                ';
-                unset($_SESSION['toggle']);
+            $alerts = [
+                'del' => 'Задача успешно удалена!',
+                'add' => 'Задача успешно добавлена!',
+                'toggle' => 'Задача успешно обновлена!',
+            ];
+
+            foreach ($alerts as $key => $value) {
+                if (isset($_SESSION[$key])) {
+                    echo
+                    '
+                    <div id="alert" class="alert alert-success text-center" role="alert">
+                        '.$value.'
+                    </div>
+                    ';
+                    unset($_SESSION[$key]);
+                }
             }
         ?>
 
@@ -73,7 +63,9 @@ $res = Task::getTasks();
                         <tr class='$class' style='--bs-bg-opacity: 0.15;'>
                             <td>$n</td>
                             <td style='text-decoration: $strike'>
-                                {$item['text']}
+                                <a href='edit_task.php?id={$item['id']}'>
+                                    {$item['text']}
+                                </a>
                             </td>
                             <td>
                                 <form method='POST' action='toggle_task.php'>
