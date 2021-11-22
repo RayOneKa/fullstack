@@ -19,6 +19,6 @@ $mysql = $config['mysql'];
 $data = explode('.', $name);
 $ext = $data[count($data) - 1];
 
-$name = time() . rand(0, 1000000) . '.' . $ext;
-$fullName = '../../uploads/categories/' . $name;
+$name = 'categories/' . time() . rand(0, 1000000) . '.' . $ext;
+$fullName = '../../uploads/' . $name;
 move_uploaded_file($temp_name, $fullName);
