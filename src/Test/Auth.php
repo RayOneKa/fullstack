@@ -39,7 +39,8 @@ class Auth
         }
 
         $password = md5($password);
-        $mysql = new \mysqli('localhost', 'root', 'root', 'fullstack');
+        $config = require_once './config/config.php';
+        $mysql = $config['mysql'];
         $query = "INSERT INTO users
                     (name, login, age, city_id, password)
                     VALUES('$name', '$login', '$age', '$cityId', '$password')";
@@ -63,13 +64,20 @@ class Auth
     public static function Login ($login, $password)
     {
         $password = md5($password);
-        $mysql = new \mysqli('localhost', 'root', 'root', 'fullstack');
-        $query = "SELECT * FROM users WHERE login = '$login' and password = '$password'";
-        $res = $mysql->query($query);
-        if ($res->num_rows == 1) {
+        $config = require_once './config/config.php';
+        $mysql = $config['mysql'];
+        $query = "SELECT * FROM users WHERE login = :login and password = :password";
+        $res = $mysql->prepare($query);
+        $res->execute([
+            ':login' => $login,
+            ':password' => $password
+        ]);
+        if ($res->rowCount() == 1) {
+            $user = $res->fetch();
             return [
                 'error' => false,
-                'errors' => null
+                'errors' => null,
+                'user' => $user
             ]; 
         } else {
             return [

@@ -1,10 +1,11 @@
 <?php
 session_start();
 include 'autoloader.php';
+
 ?>
 
 <!doctype html>
-<html lang="en">
+<html lang="ru">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,15 +22,13 @@ include 'autoloader.php';
     <body>
         <div class='container mt-5'>
             <?php
-
-                /**
-                 * Вывести "Добро пожаловать *имя_пользователя*
-                 */
-
-                if ($_SESSION['auth']) {
+                if (isset($_SESSION['auth'])) {
+                    $admin = $_SESSION['auth']['is_admin'] ? "(<a href='admin/index.php'>Админка</a>)" : '';
                     echo 
                     "
-                    <button class='btn btn-danger w-100 mb-2'><a href='logout.php'>ВЫХОД</a></button>
+                    Добро пожаловать, {$_SESSION['auth']['login']} $admin
+                    <br>
+                    <button class='btn btn-danger w-100 mt-5 mb-2'><a href='logout.php'>ВЫХОД</a></button>
                     ";
                 } else {
                     echo 

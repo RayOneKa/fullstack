@@ -11,9 +11,6 @@ if ($res['error']) {
     $_SESSION['login']['error'] = $res['errors'];
     header('Location: login.php');
 } else {
-    /**
-     * Заполнить массив реальными данными пользователя
-     */
-    $_SESSION['auth'] = true;
+    $_SESSION['auth'] = $res['user'];
     header('Location: index.php');
 }
