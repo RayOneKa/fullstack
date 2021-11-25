@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$name = $_POST['name'];
+$categoryName = $_POST['name'];
 $description = $_POST['description'];
 $file = $_FILES['file'];
 $name = $file['name'];
@@ -19,6 +19,15 @@ $mysql = $config['mysql'];
 $data = explode('.', $name);
 $ext = $data[count($data) - 1];
 
-$name = 'categories/' . time() . rand(0, 1000000) . '.' . $ext;
-$fullName = '../../uploads/' . $name;
+$pictureName = 'categories/' . time() . rand(0, 1000000) . '.' . $ext;
+$fullName = '../../uploads/' . $pictureName;
 move_uploaded_file($temp_name, $fullName);
+
+$res = $mysql->prepare("INSERT INTO categories (name, description, picture) values (:name, :description, :picture)");
+$res->execute([
+    ':name' => $categoryName,
+    ':description' => $description,
+    ':picture' => $pictureName
+]);
+
+header('Location: ../categories.php');
