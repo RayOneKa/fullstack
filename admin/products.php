@@ -10,15 +10,16 @@
         $page = 1;
     }
 
-
-    /**
-     * ПОЛУЧИТЬ КОЛИЧЕСТВО ПРОДУКТОВ
-     */
-
     $take = 5;
     #1 страница пропустить 0 взять 5
     #2 страница пропустить 5 взять 5
     #3 страница пропустить 10 взять 5
+
+    /**
+     * ПОЛУЧИТЬ КОЛИЧЕСТВО ПРОДУКТОВ
+     */
+    $count = $mysql->query("SELECT COUNT(*) count FROM products")->fetch()['count'];
+    $last_page = ceil($count / $take);
 
     $skip = ($page - 1) * $take;
 
@@ -137,9 +138,12 @@
                         ";
                     }
 
+                    $firstHidden = $page == 1 ? 'hidden' : '';
+                    $lastHidden = $page == $last_page ? 'hidden' : '';
                     $disabled = $page == 1 ? 'disabled' : '';
                     $prevPage = $page - 1;
                     $nextPage = $page + 1;
+                    $lastPageDisabled = $page == $last_page ? 'disabled' : '';
                     echo 
                     "
                     <tr>
@@ -148,28 +152,24 @@
                                 <a href='products.php?page=$prevPage'> < </a>
                             </button>
 
-                            <button class='btn btn-info'>
+                            <button class='btn btn-info' $firstHidden $disabled>
                                 <a href='products.php?page=1'> 1 </a>
                             </button>
 
                             <button disabled class='btn btn-info'>
-                                <a href='products.php?page=$page'> $page </a>
+                                <a disabled href='products.php?page=$page'> $page </a>
                             </button>                            
 
-                            <button class='btn btn-info'>
-                                <a href='products.php?page=4'> 4 </a>
+                            <button class='btn btn-info' $lastPageDisabled $lastHidden>
+                                <a href='products.php?page=$last_page'> $last_page </a>
                             </button>                            
 
-                            <button class='btn btn-info'>
+                            <button class='btn btn-info' $lastPageDisabled>
                                 <a href='products.php?page=$nextPage'> > </a>
                             </button>
                         </td>
                     </tr>
                     ";
-                    /**
-                     * ДИНАМИЧЕСКИ ВЫВОДИТЬ ПОСЛЕДНЮЮ
-                     * ОРГАНИЧИТЬ ПОСЛЕДНЮЮ СТРАНИЦУ
-                     */
                     ?>
                </tbody>
            </table>

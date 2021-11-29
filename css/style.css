@@ -1,0 +1,11 @@
+.categories {
+    display: flex;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.category-picture {
+    height: 200px;
+}
