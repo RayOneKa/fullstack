@@ -1,4 +1,4 @@
-.categories {
+.categories, .products {
     display: flex;
     align-content: center;
     justify-content: space-around;
@@ -8,4 +8,12 @@
 
 .category-picture {
     height: 200px;
+}
+
+.product-picture {
+    width: 85%;
+}
+
+.display-inline {
+    display: inline-block;
 }
