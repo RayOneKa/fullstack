@@ -33,13 +33,23 @@ $categories = $mysql->query($query);
 
             <?php
 
-                if (isset($_SESSION['errorCategoryUpload'])) {
-                    echo "
-                        <div class='alert alert-warning text-center' role='alert'>
-                            Ваш файл не картинка!
-                        </div>
-                        ";
-                    unset($_SESSION['errorCategoryUpload']);
+                $category_name = $_SESSION['categories']['name'];
+                $message = [
+                    'errorCategoryUpload' =>  'Ваш файл не картинка',
+                    'errorCategorySize' => 'Размер файла больше 3 мб',
+                    'addСategories' => 'Категория успешно добавлена',
+                    'editСategories' => "Изменения категории <em>$category_name</em> успешно выполнены",
+                    'errorCategoryEdit' => 'Вы не сделали изменений категории',
+                    'editСategoriesPict' => "Картинка категории <em>$category_name</em> обновлена"
+                ];
+                foreach ($message as $key => $value) {
+                    if (isset($_SESSION[$key])) {
+
+                        echo "<div class = 'alert alert-warning text-center' role = 'alert'>
+                            $value
+                        </div>";
+                        unset($_SESSION[$key]); 
+                    }
                 }
 
             ?>
@@ -58,6 +68,7 @@ $categories = $mysql->query($query);
                         <th>Изображение</th>
                         <th>Описание</th>
                         <th>Кол-во товаров</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,6 +83,12 @@ $categories = $mysql->query($query);
                                 </td>
                                 <td>{$category['description']}</td>
                                 <td>{$category['quantity']}</td>
+                                <td class ='edit'>
+                                    <form method='POST' action = 'edit_category.php'>
+                                        <input hidden name='id' value='$category[id]'>
+                                        <button type='submit' class = 'btn btn-info'>edit</button>
+                                    </form>
+                                </td>
                             </tr>
                             ";
                         }

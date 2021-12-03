@@ -25,26 +25,13 @@ $categories = $mysql->query("SELECT * FROM CATEGORIES");
     <body>
         <div class='container mt-5'>
             <?php
-                if (isset($_SESSION['auth'])) {
-                    $admin = $_SESSION['auth']['is_admin'] ? "(<a href='admin/index.php'>Админка</a>)" : '';
-                    echo 
-                    "
-                    Добро пожаловать, {$_SESSION['auth']['login']} $admin
-                    <br>
-                    <button class='btn btn-danger w-100 mt-5 mb-2'><a href='logout.php'>ВЫХОД</a></button>
-                    ";
-                } else {
-                    echo 
-                    "
-                    <button class='btn btn-info w-100 mb-2'><a href='login.php'>ВХОД</a></button>
-                    <button class='btn btn-info w-100'><a href='register.php'>РЕГИСТРАЦИЯ</a></button>
-                    ";
-                }
+                require_once 'pages/header.php';
 
-                echo '<div class="categories">';
+                echo '<div class="categories mt-5">';
                 foreach ($categories as $category) {
                     echo "
                     <div>
+                        {$category['name']}
                         <a href='pages/category.php?id={$category['id']}'>
                             <img class='category-picture' src='uploads/{$category['picture']}'>
                         </a>

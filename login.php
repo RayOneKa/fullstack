@@ -38,9 +38,11 @@ $mysql->close();
                 unset($_SESSION['login']['error']);
             }
 
+            require_once 'pages/header.php';
+
             ?>
 
-            <form method="POST" action="do_login.php">
+            <form method="POST" class='mt-5' action="do_login.php">
                 <input name='login' autocomplete="off" required class='form-control mb-2' placeholder="Логин">
                 <input name='password' required type="password" class='form-control mb-2' placeholder="Пароль">
                 <button class='btn btn-success w-100' type="submit">ВОЙТИ</button>

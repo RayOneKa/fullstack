@@ -32,9 +32,11 @@ $mysql->close();
                 unset($_SESSION['register']);
             }
 
+            require_once 'pages/header.php';
+
             ?>
 
-            <form method="POST" action="do_register.php">
+            <form method="POST" class='mt-5' action="do_register.php">
                 <input name='name' required class='form-control mb-2' placeholder="Имя">
                 <input name='login' required class='form-control mb-2' placeholder="Логин">
                 <input name='age' type="number" class='form-control mb-2' placeholder="Возраст">

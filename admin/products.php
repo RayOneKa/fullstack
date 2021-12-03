@@ -15,9 +15,6 @@
     #2 страница пропустить 5 взять 5
     #3 страница пропустить 10 взять 5
 
-    /**
-     * ПОЛУЧИТЬ КОЛИЧЕСТВО ПРОДУКТОВ
-     */
     $count = $mysql->query("SELECT COUNT(*) count FROM products")->fetch()['count'];
     $last_page = ceil($count / $take);
 
@@ -52,10 +49,19 @@
     </head>
     <body>
         <?php
+            $product_name = $_SESSION['products']['name'];
             $message = [
                 'errorProductUpload' =>  'Ваш файл не картинка',
                 'errorProductSize' => 'Размер файла больше 3 мб',
-                'noCategory' => 'Вы не выбрали категорию'
+                'noCategory' => 'Вы не выбрали категорию',
+                'errorProductUpload' =>  'Ваш файл не картинка',
+                'errorProductSize' => 'Размер файла больше 3 мб',
+                'errorNoCategory' => 'Вы не выбрали категорию',
+                'addProduct' => 'Новый продукт успешно добавлен',
+                'noRoot' => 'Нет прав на удаление',
+                'editProducts' => "Изменение продукта <em>$product_name</em> прошло успешно",
+                'errorProductEdit' => 'Вы не сделали изменений',
+                'editProductsPict' => "Картинка продукта <em>$product_name</em> обновлена"
             ];
             foreach ($message as $key => $value) {
                 if (isset($_SESSION[$key])) {
@@ -99,6 +105,7 @@
                        <th>Цена</th>
                        <th>Категория</th>
                        <th></th>
+                       <th></th>
                    </tr>
                </thead>
                <tbody>
@@ -126,6 +133,12 @@
                             </td>
                             <td>{$product['price']}</td>
                             <td>{$product['category']}</td>
+                            <td class ='product-delete'>
+                                <form method='POST' action = 'edit_product.php'>
+                                    <input hidden name='id' value='{$product['id']}'>
+                                    <button type='submit' class = 'btn btn-info'>edit</button>
+                                </form>
+                            </td>
                             <td class='text-center product-delete'>
                                 <a
                                     class='btn btn-danger'

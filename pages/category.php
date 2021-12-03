@@ -57,7 +57,9 @@ $products = $query->fetchAll();
     <body>
         <div class='container mt-5'>
             <?php
-            echo "<h1>{$category['name']}</h1>";
+            require_once 'header.php';
+
+            echo "<h1 class='mt-5'>{$category['name']}</h1>";
             echo "<h3><em>{$category['description']}</em></h3>";
             ?>
             <div class="products">
@@ -86,7 +88,9 @@ $products = $query->fetchAll();
                     echo "
                     <div class='card mb-4' style='width: 18rem;'>
                         <div class='text-center'>
-                            <img src='../uploads/{$product['picture']}' class='card-img-top product-picture' alt='...'>
+                            <a href='product.php?id={$product['id']}&id_cat={$categoryId}'>
+                                <img src='../uploads/{$product['picture']}' class='card-img-top product-picture' alt='...'>
+                            </a>
                         </div>
                         <div class='card-body'>
                             <h5 class='card-title'>{$product['name']}</h5>
